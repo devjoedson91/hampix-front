@@ -1,7 +1,16 @@
+import Head from "next/head";
+
 export default function Home() {
   return (
-    <div>
-        <div>Hampix front</div>
-    </div>
+     <>
+        <Head>
+            <title>Hampix - login</title>
+        </Head>
+
+        <div>
+            <h1>Hampix</h1>
+        </div>
+
+     </>
   )
 }
