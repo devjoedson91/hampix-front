@@ -1,3 +1,4 @@
+import { useContext, FormEvent, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import styles from '../../styles/home.module.scss';
@@ -8,36 +9,67 @@ import { Button } from "../components/ui/Button";
 
 import Link from "next/link"; // componente de navegação
 
+import { AuthContext } from "../contexts/AuthContext";
+
 export default function Home() {
-  return (
-     <>
-        <Head>
-            <title>Hampix - login</title>
-        </Head>
 
-        <div className={styles.containerCenter}>
+    const { signIn } = useContext(AuthContext);
 
-            <Image src={logoImg} alt='Logo hampix' />
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-            <div className={styles.login}>
+    const [loading, setLoading] = useState(false);
 
-                <form action="">
+    async function handleLogin(event: FormEvent) {
 
-                    <Input placeholder="Digite seu email" type="text" />
-                    <Input placeholder="Sua senha" type="password" />
+        event.preventDefault();
 
-                    <Button type='submit' loading={false}>Acessar</Button>
+        let data = { email, password };
 
-                </form>
+        await signIn(data);
 
-                <Link href='/signup'>
-                    <a className={styles.text}>Não possui um conta? Cadastre-se</a>
-                </Link>
+    }
 
+    return (
+        <>
+            <Head>
+                <title>Hampix - login</title>
+            </Head>
+
+            <div className={styles.containerCenter}>
+
+                <Image src={logoImg} alt='Logo hampix' />
+
+                <div className={styles.login}>
+
+                    <form onSubmit={handleLogin}>
+
+                        <Input 
+                            placeholder="Digite seu email" 
+                            type="text"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+
+                        <Input 
+                            placeholder="Sua senha" 
+                            type="password" 
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+
+                        <Button type='submit' loading={false}>Acessar</Button>
+
+                    </form>
+
+                    <Link href='/signup'>
+                        <a className={styles.text}>Não possui um conta? Cadastre-se</a>
+                    </Link>
+
+                </div>
+                
             </div>
-            
-        </div>
 
-     </>
-  )
+        </>
+    );
 }
