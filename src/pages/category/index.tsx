@@ -59,3 +59,12 @@ export default function Category() {
     );
 
 }
+
+
+export const getServerSideProps = canServeSideAuth(async (ctx) => {
+
+    return {
+        props: {}
+    }
+
+});
