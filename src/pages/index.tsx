@@ -11,6 +11,10 @@ import Link from "next/link"; // componente de navegação
 
 import { AuthContext } from "../contexts/AuthContext";
 
+import { toast } from 'react-toastify';
+
+import { canServeSideGuest } from "../utils/canServeSideGuest";
+
 export default function Home() {
 
     const { signIn } = useContext(AuthContext);
@@ -24,9 +28,20 @@ export default function Home() {
 
         event.preventDefault();
 
+        // verificando o usuario passou alguma coisa
+
+        if (email === '' || password === '') {
+            toast.warning('Preencha todos os campos');
+            return;
+        }
+
+        setLoading(true);
+
         let data = { email, password };
 
         await signIn(data);
+
+        setLoading(false);
 
     }
 
@@ -58,12 +73,12 @@ export default function Home() {
                             onChange={(e) => setPassword(e.target.value)}
                         />
 
-                        <Button type='submit' loading={false}>Acessar</Button>
+                        <Button type='submit' loading={loading}>Acessar</Button>
 
                     </form>
 
                     <Link href='/signup'>
-                        <a className={styles.text}>Não possui um conta? Cadastre-se</a>
+                        <a className={styles.text}>Não possui uma conta? Cadastre-se</a>
                     </Link>
 
                 </div>
@@ -73,3 +88,15 @@ export default function Home() {
         </>
     );
 }
+
+
+// estrutura de serve-side, a interface será exibida apos passar por ela
+
+export const getServerSideProps = canServeSideGuest(async (ctx) => {
+
+    return {
+        props: {}
+    }
+
+})
+
