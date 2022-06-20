@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useState, useEffect } from "react";
 
 import { destroyCookie, setCookie, parseCookies } from 'nookies';
 import Router from 'next/router';
@@ -63,6 +63,34 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const [user, setUser] = useState<UserProps>();
 
     const isAuthenticated = !!user; // convertendo o user em boolean, se user tiver vazio essa variavel será false
+
+    useEffect(() => {
+
+        // tentar pegar o token no cookie
+
+        const { '@hampix.token': token } = parseCookies();
+
+        if (token) {
+
+            api.get('/userinfo')
+                .then(response => {
+
+                    const {id, name, email} = response.data;
+
+                    setUser({id, name, email});
+
+                })
+                .catch(() => {
+
+                    // se deu erro desloga o usuario
+
+                    signOut();
+
+                })
+
+        }
+
+    }, []);
 
     async function signIn({ email, password }: SignInProps) {
 
