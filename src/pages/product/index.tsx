@@ -7,7 +7,28 @@ import { canServeSideAuth } from "../../utils/canServeSideAuth";
 
 import { FiUpload } from "react-icons/fi";
 
-export default function Product() {
+import { setupAPIClient } from "../../services/api";
+
+// tipagens
+
+type ItemProps = {
+
+    id: string;
+    name: string;
+
+}
+
+interface CategoryProps {
+
+    categoryList: ItemProps[];
+
+}
+
+export default function Product({ categoryList }: CategoryProps) {
+
+    const [categories, setCategories] = useState(categoryList || []);
+
+    const [categorySelected, setCategorySelected] = useState(0);
 
     const [avatarUrl, setAvatarUrl] = useState('');
 
@@ -21,12 +42,18 @@ export default function Product() {
 
         if (!image) return;
 
-        if (image.type === 'image/jpeg' || image.type === 'image/jpg' || image.type === 'png') {
+        if (image.type === 'image/jpeg' || image.type === 'image/jpg' || image.type === 'image/png') {
 
             setImageAvatar(image);
             setAvatarUrl(URL.createObjectURL(event.target.files[0]));
 
         }
+
+    }
+
+    function handleChangeCategory(event) {
+
+        setCategorySelected(event.target.value);
 
     }
 
@@ -69,9 +96,14 @@ export default function Product() {
 
                         </label>
 
-                        <select>
-                            <option>bebidas</option>
-                            <option>pizzas</option>
+                        <select value={categorySelected} onChange={handleChangeCategory}>
+                            {categories.map((item, index) => {
+
+                                return (
+                                    <option key={item.id} value={index}>{item.name}</option>
+                                );
+
+                            })}
                         </select>
 
                         <input 
@@ -104,10 +136,18 @@ export default function Product() {
 
 }
 
+// esse server side será executado antes da pagina ser montada na tela
+
 export const getServerSideProps = canServeSideAuth(async (ctx) => {
 
+    const apiClient = setupAPIClient(ctx);
+
+    const response = await apiClient.get('/category');
+
     return {
-        props: {}
+        props: {
+            categoryList: response.data
+        }
     }
 
 });
