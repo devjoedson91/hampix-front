@@ -97,6 +97,13 @@ export default function Product({ categoryList }: CategoryProps) {
             toast.error('Erro ao cadastrar');
         }
 
+
+        setName('');
+        setPrice('');
+        setDescription('');
+        setImageAvatar(null);
+        setAvatarUrl('');
+
     }
 
     return (
