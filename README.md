@@ -3,11 +3,11 @@
 
 ## Sobre o projeto
 
-Aplicação que recebe pedidos de uma pizzaria/restaurante/lanchonete e informa ao setor de cozinha os pedidos que estão pendentes ou finalizados.
+Aplicação que recebe pedidos de uma pizzaria/restaurante/lanchonete e informa ao setor de cozinha a ordem dos pedidos bem como os que estão pendentes ou finalizados e dar opção ao usuário de cadastrar ou editar os produtos disponíveis no estabelecimento.
 
 ## Layout web
 
-http://front-hampix.herokuapp.com/
+https://hampix-front.vercel.app/
 
 ## Tecnologias utilizadas
 
